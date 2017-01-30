@@ -3,5 +3,5 @@
 
 
 class Notebook:
+    """Notebook to take notes on different subjects."""
     pass
-
