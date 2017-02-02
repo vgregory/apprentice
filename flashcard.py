@@ -48,7 +48,7 @@ class Flashcard:
             return self._last_review + timedelta
 
     def schedule(self, new_interval):
-        """Schedule flashcard to a new """
+        """Schedule flashcard to a new date."""
         self._last_review = datetime.date.today()
         self._interval = new_interval
 
