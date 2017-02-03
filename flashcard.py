@@ -9,21 +9,15 @@ class Flashcard:
     This class should not be used directly. Instead, should use its
     children.
     """
-    def __init__(self, json_dict=None):
+    def __init__(self, dictionary=None):
         """Initialize generic flashcard."""
-        if json_dict:
-            # From given json dictionary
-            self._creation_date = datetime.date(
-                json_dict['_creation_date']['year'],
-                json_dict['_creation_date']['month'],
-                json_dict['_creation_date']['day']
-            )
-            self._last_review = datetime.date(
-                json_dict['_last_review']['year'],
-                json_dict['_last_review']['month'],
-                json_dict['_last_review']['day']
-            )
-            self._interval = json_dict['_interval']
+        if dictionary:
+            # From dictionary
+            self._creation_date = Flashcard.dict_to_date(
+                dictionary['_creation_date'])
+            self._last_review = Flashcard.dict_to_date(
+                dictionary['_last_review'])
+            self._interval = dictionary['_interval']
         else:
             # From scratch
             self._creation_date = datetime.date.today()
@@ -57,18 +51,29 @@ class Flashcard:
 
         This method should be overwritten by each child of this class.
         """
-        class_name = type(self).__name__
         object_dict = {
-            "_creation_date": {
-                "year": self._creation_date.year,
-                "month": self._creation_date.month,
-                "day": self._creation_date.day
-            },
-            "_last_review": {
-                "year": self._last_review.year,
-                "month": self._last_review.month,
-                "day": self._last_review.day
-            },
+            "_creation_date": Flashcard.date_to_dict(self._creation_date),
+            "_last_review": Flashcard.date_to_dict(self._last_review),
             "_interval": self._interval
         }
-        return {class_name: object_dict}
+        return object_dict
+
+    @staticmethod
+    def date_to_dict(date):
+        """ Convert datetime.date object to a dictionary."""
+        dictionary = {
+            "year": date.year,
+            "month": date.month,
+            "day": date.month
+        }
+        return dictionary
+
+    @staticmethod
+    def dict_to_date(dictionary):
+        """Convert a dictionary to datetime.date object."""
+        date = datetime.date(
+            dictionary['year'],
+            dictionary['month'],
+            dictionary['day']
+        )
+        return date
